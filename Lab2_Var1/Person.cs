@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab1_Var1
+namespace Lab2_Var1
 {
-    public class Person
+    public class Person : IDateAndCopy
     {
         private string name;
         private string last_name;
@@ -68,6 +68,95 @@ namespace Lab1_Var1
         public virtual string ToShortString()
         {
             return this.name + ", " + this.last_name;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // if parameter obj can not be cast to Person return null
+            Person p = obj as Person;
+            if((System.Object)p == null)
+            {
+                return false;
+            }
+
+            return this.name == p.name &&
+                   this.last_name == p.last_name &&
+                   this.birth_date == p.birth_date;
+        }
+
+        public bool Equals(Person p)
+        {
+            if (p == null)
+            {
+                return false;
+            }
+
+            return this.name == p.name &&
+                   this.last_name == p.last_name &&
+                   this.birth_date == p.birth_date;
+        }
+
+        public static bool operator ==(Person p1, Person p2)
+        {
+            if (System.Object.ReferenceEquals(p1, p2))
+            {
+                return true;
+            }
+
+            if ((object)p1 == null || (object)p2 == null)
+            { return false; }
+
+            return p1.name == p2.name &&
+                   p1.last_name == p2.last_name &&
+                   p1.birth_date == p2.birth_date;
+        }
+
+        public static bool operator !=(Person p1, Person p2)
+        {
+            return !(p1 == p2);
+        }
+
+        public override int GetHashCode()
+        {
+            try
+            {
+                unchecked
+                {
+                    int hash = 29;
+                    hash = hash * 31 + this.name.GetHashCode();
+                    hash = hash * 31 + this.last_name.GetHashCode();
+                    hash = hash * 31 + this.birth_date.GetHashCode();
+                    return hash;
+                }
+            }
+            catch (NullReferenceException nre)
+            {
+                Console.WriteLine("One of the Person object fields is null.");
+                Console.WriteLine(nre.Message);
+            }
+        }
+
+
+        object IDateAndCopy.DeepCopy()
+        {
+            throw new NotImplementedException();
+        }
+
+        DateTime IDateAndCopy.Date
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
