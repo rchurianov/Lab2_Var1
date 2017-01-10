@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lab2_Var1
 {
-    public class Exam
+    public class Exam : IDateAndCopy
     {
         public Exam(string input_Exam_Name, int input_Grade, DateTime input_Exam_Date)
         {
@@ -99,6 +99,24 @@ namespace Lab2_Var1
             {
                 Console.WriteLine("One of the Exam object fields is null.");
                 Console.WriteLine(nre.Message);
+                return -1;
+            }
+        }
+
+        object IDateAndCopy.DeepCopy()
+        {
+            throw new NotImplementedException();
+        }
+
+        DateTime IDateAndCopy.Date
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
             }
         }
     }
