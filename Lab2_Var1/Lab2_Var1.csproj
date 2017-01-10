@@ -43,10 +43,12 @@
   <ItemGroup>
     <Compile Include="Education.cs" />
     <Compile Include="Exam.cs" />
+    <Compile Include="IDateAndCopy.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Student.cs" />
+    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

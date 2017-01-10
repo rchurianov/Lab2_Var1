@@ -138,9 +138,9 @@ namespace Lab2_Var1
             {
                 Console.WriteLine("One of the Person object fields is null.");
                 Console.WriteLine(nre.Message);
+                return -1;
             }
         }
-
 
         object IDateAndCopy.DeepCopy()
         {
