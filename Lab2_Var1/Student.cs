@@ -206,5 +206,47 @@ namespace Lab2_Var1
                    this.exam_list == s.exam_list &&
                    this.test_list == s.test_list;
         }
+
+        public static bool operator ==(Student s1, Student s2)
+        {
+            if (System.Object.ReferenceEquals(s1, s2))
+                return true;
+            if ((object)s1 == null || (object)s2 || null)
+                return false;
+
+            return s1.name == s2.name &&
+                s1.last_name == s2.last_name &&
+                s1.birth_date == s2.birth_date &&
+                s1.degree == s2.degree &&
+                s1.group_number == s2.group_number &&
+                s1.test_list == s2.test_list &&
+                s1.exam_list == s2.exam_list;
+        }
+
+        public static bool operator !=(Student s1, Student s2)
+        { return !(s1 == s2); }
+
+        public override int GetHashCode()
+        {
+            try
+            {
+                unchecked
+                {
+                    int hash = 29;
+                    hash = hash * 31 + base.GetHashCode();
+                    hash = hash * 31 + this.degree.GetHashCode();
+                    hash = hash * 31 + this.group_number.GetHashCode();
+                    hash = hash * 31 + this.test_list.GetHashCode();
+                    hash = hash * 31 + this.exam_list.GetHashCode();
+                    return hash;
+                }
+            }
+            catch (NullReferenceException nre)
+            {
+                Console.WriteLine("One of the Person object fields is null.");
+                Console.WriteLine(nre.Message);
+                return -1;
+            }
+        }
     }
 }
