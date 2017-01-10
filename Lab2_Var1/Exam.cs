@@ -34,5 +34,72 @@ namespace Lab2_Var1
         public int Grade { get; set; }
 
         public DateTime Exam_Date { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // if parameter obj can not be cast to Exam return null
+            Exam e = (Exam)obj;
+            if ((System.Object)e == null)
+            {
+                return false;
+            }
+
+            return this.Exam_Name == e.Exam_Name &&
+                   this.Exam_Date == e.Exam_Date &&
+                   this.Grade == e.Grade;
+        }
+
+        public bool Equals(Exam e)
+        {
+            if (e == null)
+                return false;
+
+            return this.Exam_Name == e.Exam_Name &&
+                   this.Exam_Date == e.Exam_Date &&
+                   this.Grade == e.Grade;
+        }
+
+        public static bool operator ==(Exam e1, Exam e2)
+        {
+            if (System.Object.ReferenceEquals(e1, e2))
+                return true;
+
+            if ((object)e1 == null || (object)e2 == null)
+                return false;
+
+            return e1.Exam_Name == e2.Exam_Name &&
+                   e1.Exam_Date == e2.Exam_Date &&
+                   e1.Grade == e2.Grade;
+        }
+
+        public static bool operator !=(Exam e1, Exam e2)
+        {
+            return !(e1 == e2);
+        }
+
+        public override int GetHashCode()
+        {
+            try
+            {
+                unchecked
+                {
+                    int hash = 29;
+                    hash = hash * 31 + this.Exam_Name.GetHashCode();
+                    hash = hash * 31 + this.Exam_Date.GetHashCode();
+                    hash = hash * 31 + this.Grade.GetHashCode();
+                    return hash;
+                }
+            }
+            catch (NullReferenceException nre)
+            {
+                Console.WriteLine("One of the Exam object fields is null.");
+                Console.WriteLine(nre.Message);
+            }
+        }
     }
 }

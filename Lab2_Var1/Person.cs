@@ -8,9 +8,9 @@ namespace Lab2_Var1
 {
     public class Person : IDateAndCopy
     {
-        private string name;
-        private string last_name;
-        private System.DateTime birth_date;
+        protected string name;
+        protected string last_name;
+        protected System.DateTime birth_date;
 
         public Person()
         {
