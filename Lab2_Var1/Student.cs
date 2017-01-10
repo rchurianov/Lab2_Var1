@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,30 +7,26 @@ using System.Threading.Tasks;
 
 namespace Lab2_Var1
 {
-    public class Student
+    public class Student : Person, IDateAndCopy
     {
-        private Person passport_data;
         private Education degree;
         private int group_number;
-        private Exam[] exam_list;
+        private ArrayList test_list;
+        private ArrayList exam_list;
 
-        public Student(Person p, Education e, int i)
+        public Student(Person p, Education e, int i) : base(p.Name, p.Last_Name, p.Birth_Date)
         {
-            passport_data = p;
             degree = e;
             group_number = i;
         }
 
-        public Student()
+        public Student() : base()
         {
-            passport_data = new Person();
-
             degree = Education.Bachelor;
 
             Random rand = new Random();
             group_number = rand.Next(101, 121);
             Console.WriteLine("Created new Student with default constructor.");
-
         }
 
         /*
@@ -48,8 +45,17 @@ namespace Lab2_Var1
 
         public Person Passport_Data
         { 
-            get { return passport_data; }
-            set { passport_data = value;}
+            get 
+            {
+                Person p = new Person(base.Name, base.Last_Name, base.Birth_Date);
+                return p;
+            }
+            set 
+            { 
+                base.name = value.Name;
+                base.last_name = value.Last_Name;
+                base.birth_date = value.Birth_Date;
+            }
         }
 
         public Education Degree
@@ -61,10 +67,17 @@ namespace Lab2_Var1
         public int Group_Number
         {
             get { return group_number; }
-            set { group_number = value; }
+            set 
+            { 
+                if (value <= 100 || value > 599)
+                {
+                    throw new ArgumentOutOfRangeException("Assigned value", value, "Value should be in the interval [100, 599].");
+                }
+                else { group_number = value; }
+            }
         }
 
-        public Exam[] Exam_List
+        public ArrayList Exam_List
         {
             get { return exam_list; }
             set { exam_list = value; }
@@ -82,11 +95,11 @@ namespace Lab2_Var1
                 double average = 0.0;
                 if (exam_list != null)
                 {
-                    for (int i = 0; i < exam_list.Length; i++)
+                    for (int i = 0; i < exam_list.Count; i++)
                     {
-                        average = average + exam_list[i].Grade;
+                        average = average + ((Exam)exam_list[i]).Grade;
                     }
-                    average /= exam_list.Length;
+                    average /= exam_list.Count;
                 }
                 return average;
             }
@@ -94,35 +107,39 @@ namespace Lab2_Var1
 
         public void AddExams(params Exam[] input_exam_list)
         {
-            if (exam_list != null)
+            if (input_exam_list != null)
             {
-                Exam[] new_exam_list = new Exam[exam_list.Length + input_exam_list.Length];
-                for (int i = 0; i < exam_list.Length; ++i)
+                if (exam_list == null)
                 {
-                    new_exam_list[i] = exam_list[i];
+                    exam_list = new ArrayList();
+                    for (int i = 0; i < input_exam_list.Length; i++)
+                    {
+                        exam_list.Add(input_exam_list[i]);
+                        Console.WriteLine("Added {0} Exams to Student's exam_list.", input_exam_list.Length);
+                    }
                 }
-                for (int i = exam_list.Length; i < exam_list.Length + input_exam_list.Length; ++i)
+                else if (exam_list != null)
                 {
-                    new_exam_list[i] = input_exam_list[i - exam_list.Length];
+                    for (int i = 0; i < input_exam_list.Length; i++)
+                    {
+                        exam_list.Add(input_exam_list[i]);
+                        Console.WriteLine("Added {0} Exams to Student's exam_list.", input_exam_list.Length);
+                    }
                 }
-                exam_list = new_exam_list;
             }
-            else
-                exam_list = input_exam_list;
-            Console.WriteLine("Added {0} Exams to Student's exam_list.", input_exam_list.Length);
         }
 
         public override string ToString()
         {
             if (exam_list != null)
                 return "Name, Last Name, Birth Date, Degree, Group No:\n" +
-                       passport_data.ToString() + ", " + degree.ToString() + ", " +
+                       base.ToString() + ", " + degree.ToString() + ", " +
                        group_number.ToString() + ",\n" +
                        "[Exam_Name, Grade, Date]\n" +
                        Exam_List_ToString();
             else
                 return "Name, Last Name, Birth Date, Degree, Group No:\n" +
-                       passport_data.ToString() + ", " +
+                       base.ToString() + ", " +
                        degree.ToString() + ", " + group_number.ToString();
         }
 
@@ -131,7 +148,7 @@ namespace Lab2_Var1
             string s = "";
             if (exam_list != null)
             {
-                for (int i = 0; i < exam_list.Length; i++)
+                for (int i = 0; i < exam_list.Count; i++)
                 {
                     s = s + exam_list[i].ToString() + "\n";
                 }
@@ -142,13 +159,52 @@ namespace Lab2_Var1
         /* Student.AGP property checks for exam_list == null
          * so we do not have to check for it in ToShortString().
          */
-        public virtual string ToShortString()
+        public override string ToShortString()
         {
             return "Name, Last Name, Birth Date, Degree, Group No, AGP:\n" +
-                   passport_data.ToString() + ", " +
+                   base.ToString() + ", " +
                    degree.ToString() + ", " +
                    group_number.ToString() + ", " +
                    AGP.ToString();
+        }
+
+        object IDateAndCopy.DeepCopy()
+        {
+            throw new NotImplementedException();
+        }
+
+        DateTime IDateAndCopy.Date
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            //if (System.Object.ReferenceEquals(this, obj))
+            //    return true;
+
+            Student s = obj as Student;
+            if ((obj)s == null)
+                return false;
+            Person p = obj as Person;
+            if ((obj)p == null)
+                return false;
+
+            return base.Equals(obj as Person) &&
+                   this.degree == s.degree &&
+                   this.group_number == s.group_number &&
+                   this.exam_list == s.exam_list &&
+                   this.test_list == s.test_list;
         }
     }
 }
