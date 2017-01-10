@@ -194,10 +194,10 @@ namespace Lab2_Var1
             //    return true;
 
             Student s = obj as Student;
-            if ((obj)s == null)
+            if ((object)s == null)
                 return false;
             Person p = obj as Person;
-            if ((obj)p == null)
+            if ((object)p == null)
                 return false;
 
             return base.Equals(obj as Person) &&
