@@ -11,22 +11,39 @@ namespace Lab2_Var1
     {
         private Education degree;
         private int group_number;
-        private ArrayList test_list;
+        private ArrayList credit_list;
         private ArrayList exam_list;
 
         public Student(Person p, Education e, int i) : base(p.Name, p.Last_Name, p.Birth_Date)
         {
             degree = e;
             group_number = i;
+
+            credit_list = new ArrayList();
+            credit_list.Add(new Credit("Analysis", true));
+            credit_list.Add(new Credit("Differential equations", true));
+
+            exam_list = new ArrayList();
+            exam_list.Add(new Exam("History", 5, new DateTime(2000, 10, 10)));
+            exam_list.Add(new Exam("Operation Systems", 5, new DateTime(2000, 20, 20)));
         }
 
         public Student() : base()
         {
             degree = Education.Bachelor;
 
-            Random rand = new Random();
-            group_number = rand.Next(101, 121);
-            Console.WriteLine("Created new Student with default constructor.");
+            //Random rand = new Random();
+            //group_number = rand.Next(101, 121);
+            group_number = 111;
+
+            credit_list = new ArrayList();
+            credit_list.Add(new Credit());
+            credit_list.Add(new Credit());
+
+            exam_list = new ArrayList();
+            exam_list.Add(new Exam());
+            exam_list.Add(new Exam());
+            //Console.WriteLine("Created new Student with default constructor.");
         }
 
         /*
@@ -81,6 +98,12 @@ namespace Lab2_Var1
         {
             get { return exam_list; }
             set { exam_list = value; }
+        }
+
+        public ArrayList Credit_List
+        {
+            get { return credit_list; }
+            set { credit_list = value; }
         }
 
         /* In case exam_list == null
@@ -200,18 +223,33 @@ namespace Lab2_Var1
             if ((object)p == null)
                 return false;
 
-            return base.Equals(obj as Person) &&
+            return base.Name == s.Name &&
+                   base.Last_Name == s.Last_Name &&
+                   base.Birth_Date == s.Birth_Date &&
+                   this.Degree.ToString() == s.Degree.ToString() &&
+                   this.Group_Number.ToString() == s.Group_Number.ToString() &&
+                   this.Exam_List.ToString() == s.Exam_List.ToString() &&
+                   this.Credit_List.ToString() == s.Credit_List.ToString();
+        }
+
+        /*
+         * public bool Equals(Student s)
+        {
+            if (s == null)
+                return false;
+
+            return base.Equals(s as Person) &&
                    this.degree == s.degree &&
                    this.group_number == s.group_number &&
                    this.exam_list == s.exam_list &&
-                   this.test_list == s.test_list;
+                   this.credit_list == s.credit_list;
         }
-
+        */
         public static bool operator ==(Student s1, Student s2)
         {
             if (System.Object.ReferenceEquals(s1, s2))
                 return true;
-            if ((object)s1 == null || (object)s2 || null)
+            if ((object)s1 == null || (object)s2 == null)
                 return false;
 
             return s1.name == s2.name &&
@@ -219,7 +257,7 @@ namespace Lab2_Var1
                 s1.birth_date == s2.birth_date &&
                 s1.degree == s2.degree &&
                 s1.group_number == s2.group_number &&
-                s1.test_list == s2.test_list &&
+                s1.credit_list == s2.credit_list &&
                 s1.exam_list == s2.exam_list;
         }
 
@@ -228,18 +266,28 @@ namespace Lab2_Var1
 
         public override int GetHashCode()
         {
-            try
+            if (this.credit_list == null ||
+                this.exam_list == null)
+            {
+                throw new NullReferenceException("One of the Student object's fields is null.");
+            }
+            else
             {
                 unchecked
                 {
                     int hash = 29;
                     hash = hash * 31 + base.GetHashCode();
-                    hash = hash * 31 + this.degree.GetHashCode();
-                    hash = hash * 31 + this.group_number.GetHashCode();
-                    hash = hash * 31 + this.test_list.GetHashCode();
-                    hash = hash * 31 + this.exam_list.GetHashCode();
+                    hash = hash * 31 + (int)this.degree;
+                    hash = hash * 31 + this.group_number;
+                    hash = hash * 31 + Credit_List_GetHashCode();
+                    hash = hash * 31 + Exam_List_GetHashCode();
                     return hash;
                 }
+            }
+            /*
+            try
+            {
+                
             }
             catch (NullReferenceException nre)
             {
@@ -247,6 +295,34 @@ namespace Lab2_Var1
                 Console.WriteLine(nre.Message);
                 return -1;
             }
+             * */
         }
+
+        private int Credit_List_GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 29;
+                foreach (Credit cr in credit_list)
+                {
+                    hash = hash * 31 + cr.GetHashCode();
+                }
+                return hash;
+            }
+        }
+
+        private int Exam_List_GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 29;
+                foreach (Exam ex in exam_list)
+                {
+                    hash = hash * 31 + ex.GetHashCode();
+                }
+                return hash;
+            }
+        }
+
     }
 }
