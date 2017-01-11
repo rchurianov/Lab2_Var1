@@ -89,17 +89,17 @@ namespace Lab2_Var1
                    this.birth_date == p.birth_date;
         }
 
-        public bool Equals(Person p)
-        {
-            if (p == null)
-            {
-                return false;
-            }
+        //public bool Equals(Person p)
+        //{
+        //    if (p == null)
+        //    {
+        //        return false;
+        //    }
 
-            return this.name == p.name &&
-                   this.last_name == p.last_name &&
-                   this.birth_date == p.birth_date;
-        }
+        //    return this.name == p.name &&
+        //           this.last_name == p.last_name &&
+        //           this.birth_date == p.birth_date;
+        //}
 
         public static bool operator ==(Person p1, Person p2)
         {
@@ -123,16 +123,33 @@ namespace Lab2_Var1
 
         public override int GetHashCode()
         {
-            try
+            if (this.name == null ||
+                this.last_name == null ||
+                this.birth_date == null)
+            {
+                throw new NullReferenceException("One of the Person object fields is null.");
+            }
+            else
             {
                 unchecked
                 {
                     int hash = 29;
-                    hash = hash * 31 + this.name.GetHashCode();
-                    hash = hash * 31 + this.last_name.GetHashCode();
-                    hash = hash * 31 + this.birth_date.GetHashCode();
+                    for (int i = 0; i < name.Length; i++)
+                    {
+                        hash = hash * 31 + (int)name[i];
+                    }
+                    for (int i = 0; i < last_name.Length; i++)
+                    {
+                        hash = hash * 31 + (int)last_name[i];
+                    }
+                    hash = hash * Int_Birth_Date;
                     return hash;
                 }
+            }
+            /*
+            try
+            {
+                
             }
             catch (NullReferenceException nre)
             {
@@ -140,6 +157,7 @@ namespace Lab2_Var1
                 Console.WriteLine(nre.Message);
                 return -1;
             }
+             * */
         }
 
         object IDateAndCopy.DeepCopy()
