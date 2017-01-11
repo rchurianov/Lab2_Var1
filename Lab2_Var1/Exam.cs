@@ -74,7 +74,7 @@ namespace Lab2_Var1
 
             return e1.Exam_Name == e2.Exam_Name &&
                    e1.Exam_Date == e2.Exam_Date &&
-                   e1.Grade == e2.Grade;
+                   e1.Grade.ToString() == e2.Grade.ToString();
         }
 
         public static bool operator !=(Exam e1, Exam e2)
@@ -84,23 +84,35 @@ namespace Lab2_Var1
 
         public override int GetHashCode()
         {
-            try
+            if (this.Exam_Name == null || this.Exam_Date == null)
+            {
+                throw new NullReferenceException("One of the Exam object fields is null.");
+            }
+            else
             {
                 unchecked
                 {
                     int hash = 29;
-                    hash = hash * 31 + this.Exam_Name.GetHashCode();
-                    hash = hash * 31 + this.Exam_Date.GetHashCode();
-                    hash = hash * 31 + this.Grade.GetHashCode();
+                    for (int i = 0; i < Exam_Name.Length; i++)
+                    {
+                        hash = hash * 31 + (int)Exam_Name[i];
+                    }
+                    hash = hash * 31 + Exam_Date.Year + Exam_Date.Month + Exam_Date.Day;
+                    hash = hash * 31 + this.Grade;
                     return hash;
                 }
             }
-            catch (NullReferenceException nre)
-            {
-                Console.WriteLine("One of the Exam object fields is null.");
-                Console.WriteLine(nre.Message);
-                return -1;
-            }
+            //try
+            //{
+
+                
+            //}
+            //catch (NullReferenceException nre)
+            //{
+            //    Console.WriteLine("One of the Exam object fields is null.");
+            //    Console.WriteLine(nre.Message);
+            //    return -1;
+            //}
         }
 
         object IDateAndCopy.DeepCopy()
