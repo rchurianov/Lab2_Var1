@@ -30,5 +30,24 @@ namespace Lab2_Var1
         {
             return Credit_Name + " passed: " + Credit_Passed.ToString();
         }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 29;
+                for (int i = 0; i < Credit_Name.Length; i++)
+                {
+                    hash = hash * 31 + (int)Credit_Name[i];
+                }
+
+                if (Credit_Passed)
+                    hash += 37;
+                else
+                    hash += 47;
+                
+                return hash;
+            }
+        }
     }
 }
