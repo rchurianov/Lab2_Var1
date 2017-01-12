@@ -38,5 +38,33 @@ namespace UnitTestProject
             Assert.AreNotEqual(s, s_copy);
         }
 
+        [TestMethod]
+        public void Test_Session_Iterator()
+        {
+            Student s = new Student();
+            foreach (Object o in s.Session_Iterator())
+            {
+                Console.WriteLine(o.ToString());
+            }
+        }
+
+        [TestMethod]
+        public void Test_Exam_Iterator()
+        {
+            Student s = new Student();
+            s.AddExams(new Exam("Mathematical Statistics", 2, new DateTime()));
+            s.AddExams(new Exam("Probability Theory", 3, new DateTime()));
+            s.AddExams(new Exam("Physics", 4, new DateTime()));
+            Console.WriteLine("\nFull session list:\n");
+            foreach (Object o in s.Session_Iterator())
+            {
+                Console.WriteLine(o.ToString());
+            }
+            Console.WriteLine("\nExams with grade higher than 3:\n");
+            foreach (Exam e in s.Exam_Iterator(3))
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
     }
 }
