@@ -49,5 +49,13 @@ namespace Lab2_Var1
                 return hash;
             }
         }
+
+        public object DeepCopy()
+        {
+            Credit credit_copy = new Credit();
+            credit_copy.Credit_Name = this.Credit_Name;
+            credit_copy.Credit_Passed = this.Credit_Passed;
+            return credit_copy;
+        }
     }
 }
