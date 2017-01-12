@@ -138,7 +138,6 @@ namespace Lab2_Var1
                     for (int i = 0; i < input_exam_list.Length; i++)
                     {
                         exam_list.Add(input_exam_list[i]);
-                        Console.WriteLine("Added {0} Exams to Student's exam_list.", input_exam_list.Length);
                     }
                 }
                 else if (exam_list != null)
@@ -146,9 +145,9 @@ namespace Lab2_Var1
                     for (int i = 0; i < input_exam_list.Length; i++)
                     {
                         exam_list.Add(input_exam_list[i]);
-                        Console.WriteLine("Added {0} Exams to Student's exam_list.", input_exam_list.Length);
                     }
                 }
+                Console.WriteLine("Added {0} Exam(s) to Student's exam_list.", input_exam_list.Length);
             }
         }
 
@@ -201,10 +200,32 @@ namespace Lab2_Var1
                    AGP.ToString();
         }
 
-        object IDateAndCopy.DeepCopy()
+        protected override object DeepCopy()
         {
             Student student_copy = new Student();
-            return student_copy();
+            student_copy.name = this.name;
+            student_copy.last_name = this.last_name;
+            student_copy.birth_date = this.birth_date;
+            student_copy.degree = this.degree;
+            student_copy.group_number = this.group_number;
+            // student_copy.credit_list = this.credit_list;
+            student_copy.credit_list = new ArrayList();
+            for (int i = 0; i < this.credit_list.Count; i++)
+            {
+                student_copy.credit_list.Add(((Credit)this.credit_list[i]).DeepCopy());
+            }
+            // student_copy.exam_list = this.exam_list;
+            student_copy.exam_list = new ArrayList();
+            for (int i = 0; i < this.exam_list.Count; i++)
+            {
+                student_copy.exam_list.Add(((Exam)this.exam_list[i]).DeepCopy());
+            }
+            return student_copy;
+        }
+
+        object IDateAndCopy.DeepCopy()
+        {
+            return this.DeepCopy();
         }
 
         DateTime IDateAndCopy.Date
@@ -213,7 +234,7 @@ namespace Lab2_Var1
             {
                 return new DateTime();
             }
-            set;
+            set { }
         }
 
         public override bool Equals(object obj)
@@ -236,8 +257,8 @@ namespace Lab2_Var1
                    base.Birth_Date == s.Birth_Date &&
                    this.Degree.ToString() == s.Degree.ToString() &&
                    this.Group_Number.ToString() == s.Group_Number.ToString() &&
-                   this.Exam_List.ToString() == s.Exam_List.ToString() &&
-                   this.Credit_List.ToString() == s.Credit_List.ToString();
+                   this.Exam_List_ToString() == s.Exam_List_ToString() &&
+                   this.Credit_List_ToString() == s.Credit_List_ToString();
         }
 
         /*
