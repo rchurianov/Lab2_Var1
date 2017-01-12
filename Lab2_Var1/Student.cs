@@ -154,16 +154,13 @@ namespace Lab2_Var1
 
         public override string ToString()
         {
-            if (exam_list != null)
-                return "Name, Last Name, Birth Date, Degree, Group No:\n" +
-                       base.ToString() + ", " + degree.ToString() + ", " +
-                       group_number.ToString() + ",\n" +
-                       "[Exam_Name, Grade, Date]\n" +
-                       Exam_List_ToString();
-            else
-                return "Name, Last Name, Birth Date, Degree, Group No:\n" +
-                       base.ToString() + ", " +
-                       degree.ToString() + ", " + group_number.ToString();
+            return "Name, Last Name, Birth Date, Degree, Group No:\n" +
+                    base.ToString() + ", " + degree.ToString() + ", " +
+                    group_number.ToString() + ",\n" +
+                    "[Credit_Name, Passed]\n" +
+                    Credit_List_ToString() +
+                    "[Exam_Name, Grade, Date]\n" +
+                    Exam_List_ToString();
         }
 
         private string Exam_List_ToString()
@@ -174,6 +171,19 @@ namespace Lab2_Var1
                 for (int i = 0; i < exam_list.Count; i++)
                 {
                     s = s + exam_list[i].ToString() + "\n";
+                }
+            }
+            return s;
+        }
+
+        private string Credit_List_ToString()
+        {
+            string s = "";
+            if (credit_list != null)
+            {
+                for (int i = 0; i < credit_list.Count; i++)
+                {
+                    s = s + credit_list[i].ToString() + "\n";
                 }
             }
             return s;
@@ -193,19 +203,17 @@ namespace Lab2_Var1
 
         object IDateAndCopy.DeepCopy()
         {
-            throw new NotImplementedException();
+            Student student_copy = new Student();
+            return student_copy();
         }
 
         DateTime IDateAndCopy.Date
         {
             get
             {
-                throw new NotImplementedException();
+                return new DateTime();
             }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set;
         }
 
         public override bool Equals(object obj)
@@ -245,6 +253,7 @@ namespace Lab2_Var1
                    this.credit_list == s.credit_list;
         }
         */
+
         public static bool operator ==(Student s1, Student s2)
         {
             if (System.Object.ReferenceEquals(s1, s2))
