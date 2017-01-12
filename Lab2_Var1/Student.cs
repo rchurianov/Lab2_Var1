@@ -169,6 +169,20 @@ namespace Lab2_Var1
             }
         }
 
+        public IEnumerable<Exam> Exam_Iterator(int min_grade)
+        {
+            if (exam_list != null)
+            {
+                for (int i = 0; i < exam_list.Count; i++)
+                {
+                    if (((Exam)exam_list[i]).Grade > min_grade)
+                    {
+                        yield return (Exam)exam_list[i];
+                    }
+                }
+            }
+        }
+
         public override string ToString()
         {
             return "Name, Last Name, Birth Date, Degree, Group No:\n" +
