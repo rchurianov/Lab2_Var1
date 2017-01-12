@@ -102,34 +102,24 @@ namespace Lab2_Var1
                     return hash;
                 }
             }
-            //try
-            //{
-
-                
-            //}
-            //catch (NullReferenceException nre)
-            //{
-            //    Console.WriteLine("One of the Exam object fields is null.");
-            //    Console.WriteLine(nre.Message);
-            //    return -1;
-            //}
         }
 
         object IDateAndCopy.DeepCopy()
         {
-            throw new NotImplementedException();
+            Exam exam_copy = new Exam();
+            exam_copy.Exam_Name = this.Exam_Name;
+            exam_copy.Grade = this.Grade;
+            exam_copy.Exam_Date = this.Exam_Date;
+            return exam_copy;
         }
 
         DateTime IDateAndCopy.Date
         {
             get
             {
-                throw new NotImplementedException();
+                return new DateTime();
             }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set;
         }
     }
 }
