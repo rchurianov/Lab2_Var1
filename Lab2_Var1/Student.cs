@@ -151,6 +151,24 @@ namespace Lab2_Var1
             }
         }
 
+        public IEnumerable Session_Iterator()
+        {
+            if (credit_list != null)
+            {
+                for (int i = 0; i < credit_list.Count; i++)
+                {
+                    yield return credit_list[i];
+                }
+            }
+            if (exam_list != null)
+            {
+                for (int i = 0; i < exam_list.Count; i++)
+                {
+                    yield return exam_list[i];
+                }
+            }
+        }
+
         public override string ToString()
         {
             return "Name, Last Name, Birth Date, Degree, Group No:\n" +
@@ -260,20 +278,6 @@ namespace Lab2_Var1
                    this.Exam_List_ToString() == s.Exam_List_ToString() &&
                    this.Credit_List_ToString() == s.Credit_List_ToString();
         }
-
-        /*
-         * public bool Equals(Student s)
-        {
-            if (s == null)
-                return false;
-
-            return base.Equals(s as Person) &&
-                   this.degree == s.degree &&
-                   this.group_number == s.group_number &&
-                   this.exam_list == s.exam_list &&
-                   this.credit_list == s.credit_list;
-        }
-        */
 
         public static bool operator ==(Student s1, Student s2)
         {
