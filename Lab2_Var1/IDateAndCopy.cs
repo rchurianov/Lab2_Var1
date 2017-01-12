@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lab2_Var1
 {
-    interface IDateAndCopy
+    public interface IDateAndCopy
     {
         object DeepCopy();
         DateTime Date { get; set; }
