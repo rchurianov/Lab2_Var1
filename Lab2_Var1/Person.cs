@@ -160,21 +160,27 @@ namespace Lab2_Var1
              * */
         }
 
-        object IDateAndCopy.DeepCopy()
+        public virtual object DeepCopy()
         {
             throw new NotImplementedException();
+        }
+
+        object IDateAndCopy.DeepCopy()
+        {
+            Person person_copy = new Person();
+            person_copy.name = this.name;
+            person_copy.last_name = this.last_name;
+            person_copy.birth_date = this.birth_date;
+            return person_copy;
         }
 
         DateTime IDateAndCopy.Date
         {
             get
             {
-                throw new NotImplementedException();
+                return new DateTime();
             }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set;
         }
     }
 }
