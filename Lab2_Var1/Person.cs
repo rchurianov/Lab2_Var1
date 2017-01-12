@@ -127,7 +127,7 @@ namespace Lab2_Var1
                 this.last_name == null ||
                 this.birth_date == null)
             {
-                throw new NullReferenceException("One of the Person object fields is null.");
+                throw new NullReferenceException("One of the Person object's fields is null.");
             }
             else
             {
@@ -146,26 +146,9 @@ namespace Lab2_Var1
                     return hash;
                 }
             }
-            /*
-            try
-            {
-                
-            }
-            catch (NullReferenceException nre)
-            {
-                Console.WriteLine("One of the Person object fields is null.");
-                Console.WriteLine(nre.Message);
-                return -1;
-            }
-             * */
         }
 
-        public virtual object DeepCopy()
-        {
-            throw new NotImplementedException();
-        }
-
-        object IDateAndCopy.DeepCopy()
+        protected virtual object DeepCopy()
         {
             Person person_copy = new Person();
             person_copy.name = this.name;
@@ -174,13 +157,18 @@ namespace Lab2_Var1
             return person_copy;
         }
 
+        object IDateAndCopy.DeepCopy()
+        {
+            return this.DeepCopy();
+        }
+
         DateTime IDateAndCopy.Date
         {
             get
             {
                 return new DateTime();
             }
-            set;
+            set { }
         }
     }
 }
