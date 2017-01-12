@@ -22,17 +22,17 @@ namespace UnitTestProject
             Assert.AreNotEqual(pe, p_compare);
         }
 
-        [TestMethod]
-        public void TestPersonEquals()
-        {
-            Person p1 = new Person();
-            Assert.AreEqual(false, p1.Equals((Person)null));
-            Person p2 = new Person();
-            Assert.AreEqual(true, p1.Equals(p2));
-            p2.Name = "Douglas";
-            Assert.AreNotEqual(p1, p2);
-            Assert.AreEqual(false, p2.Equals(p1));
-        }
+        //[TestMethod]
+        //public void TestPersonEquals()
+        //{
+        //    Person p1 = new Person();
+        //    Assert.AreEqual(false, p1.Equals((Person)null));
+        //    Person p2 = new Person();
+        //    Assert.AreEqual(true, p1.Equals(p2));
+        //    p2.Name = "Douglas";
+        //    Assert.AreNotEqual(p1, p2);
+        //    Assert.AreEqual(false, p2.Equals(p1));
+        //}
 
         [TestMethod]
         public void TestEqualityOperator()
@@ -62,6 +62,16 @@ namespace UnitTestProject
             Person p1 = new Person();
             Person p2 = new Person();
             Assert.AreEqual(p1.GetHashCode(), p2.GetHashCode());
+        }
+
+        [TestMethod]
+        public void TestDeepCopy()
+        {
+            IDateAndCopy p = new Person();
+            Person p_copy = (Person)p.DeepCopy();
+            Assert.AreEqual(p, p_copy);
+            p_copy.Birth_Date = new DateTime();
+            Assert.AreNotEqual(p, p_copy);
         }
     }
 }
