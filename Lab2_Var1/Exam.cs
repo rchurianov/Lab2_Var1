@@ -104,7 +104,7 @@ namespace Lab2_Var1
             }
         }
 
-        object IDateAndCopy.DeepCopy()
+        public object DeepCopy()
         {
             Exam exam_copy = new Exam();
             exam_copy.Exam_Name = this.Exam_Name;
@@ -113,13 +113,18 @@ namespace Lab2_Var1
             return exam_copy;
         }
 
+        object IDateAndCopy.DeepCopy()
+        {
+            return this.DeepCopy();
+        }
+
         DateTime IDateAndCopy.Date
         {
             get
             {
                 return new DateTime();
             }
-            set;
+            set { }
         }
     }
 }
