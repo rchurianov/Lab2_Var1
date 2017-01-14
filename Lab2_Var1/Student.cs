@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lab2_Var1
 {
-    public class Student : Person, IDateAndCopy
+    public class Student : Person, IDateAndCopy, IEnumerable
     {
         private Education degree;
         private int group_number;
@@ -372,5 +372,69 @@ namespace Lab2_Var1
             }
         }
 
+        private class StudentEnumerator : IEnumerator
+        {
+            //private Student student;
+            private ArrayList credit_intersect_exam;
+            private int current;
+
+            public StudentEnumerator(Student input_s)
+            {
+                IComparer comparer = new Credit_Exam_Comparer();
+                input_s.exam_list.Sort();
+                credit_intersect_exam = new ArrayList();
+                for (int i = 0; i < input_s.credit_list.Count; i++ )
+                {
+                    //Console.WriteLine("In the loop.");
+                    //if (input_s.exam_list.BinarySearch(((Credit)input_s.credit_list[i]).Credit_Name, comparer) > 0)
+                    if (input_s.exam_list.BinarySearch((Credit)input_s.credit_list[i], comparer) == 0)
+                    {
+                        credit_intersect_exam.Add(input_s.credit_list[i]);
+                        //Console.WriteLine("Added Credit to StudentEnumerator.");
+                    }
+                }
+                this.current = -1;
+            }
+
+            public object Current
+            {
+                get { return credit_intersect_exam[current]; }
+            }
+
+            public bool MoveNext()
+            {
+                ++current;
+                if (current < credit_intersect_exam.Count)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public void Reset()
+            {
+                current = -1;
+            }
+
+            private class Credit_Exam_Comparer : IComparer
+            {
+                int IComparer.Compare(object x, object y)
+                {
+                    //return String.Compare(((Exam)x).Exam_Name, ((Credit)y).Credit_Name);
+                    //return String.Compare(((Exam)x).Exam_Name, (String)y);
+                    //Console.WriteLine("Compraing.");
+                    string e_name = ((Exam)x).Exam_Name;
+                    return e_name.CompareTo(((Credit)y).Credit_Name);
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new StudentEnumerator(this);
+        }
     }
 }
