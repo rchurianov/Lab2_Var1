@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Lab2_Var1;
+using System.Collections;
 
 namespace UnitTestProject
 {
@@ -64,6 +65,18 @@ namespace UnitTestProject
             foreach (Exam e in s.Exam_Iterator(3))
             {
                 Console.WriteLine(e.ToString());
+            }
+        }
+
+        [TestMethod]
+        public void Test_StudentEnumerator()
+        {
+            IEnumerable student = new Student();
+            ((Student)student).Credit_List.Add(new Credit("Compilators", true));
+            ((Student)student).AddExams(new Exam("Compilators", 4, new DateTime()));
+            foreach (Object obj in student)
+            {
+                Console.WriteLine(obj.ToString());
             }
         }
     }
