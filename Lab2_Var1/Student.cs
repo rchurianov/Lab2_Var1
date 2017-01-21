@@ -372,10 +372,16 @@ namespace Lab2_Var1
             }
         }
 
-        //TODO: commentaries!!!!
+        /* StudentEnumerator - helper class, which implements
+         * IEnumerator interface. This means, it has methods MoveNext()
+         * and Reset() and public property Current.
+         * 
+         * StudentEnumerator shuold implement
+         */
         private class StudentEnumerator : IEnumerator
         {
-            //private Student student;
+            /* 
+             */
             private ArrayList credit_intersect_exam;
             private int current;
 
@@ -434,8 +440,16 @@ namespace Lab2_Var1
             }
         }
 
+        /* Student class implements IEnumerable interface,
+         * so it should implement GetEnumerator() method.
+         * GetEnumerator() should return an object, that
+         * implements IEnumerator interface.
+         */
         IEnumerator IEnumerable.GetEnumerator()
         {
+            /* This method returns a new StudentEnumerator object.
+             * StudentEnumerator class implements IEnumerator interface.
+             */
             return new StudentEnumerator(this);
         }
     }
