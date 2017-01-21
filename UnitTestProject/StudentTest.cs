@@ -90,9 +90,45 @@ namespace UnitTestProject
             ((Student)student).Credit_List.Add(new Credit("Probabilistic Graphical Models", true));
             ((Student)student).AddExams(new Exam("Probabilistic Graphical Models", 4, new DateTime()));
 
+            Console.WriteLine(((Student)student).ToString());
+            Console.WriteLine();
+
             foreach (string obj in student)
             {
                 Console.WriteLine(obj);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Passed_Session_Iterator()
+        {
+            Student s = new Student();
+            s.Credit_List.Add(new Credit("Compilators", false));
+            s.AddExams(new Exam("Game Theory", 2, new DateTime()));
+            Console.WriteLine(s.ToString());
+            Console.WriteLine();
+
+            foreach(object o in s.Passed_Session_Iterator())
+            {
+                Console.WriteLine(o.ToString());
+            }
+        }
+
+        [TestMethod]
+        public void Test_Passed_Credit_Iterator()
+        {
+            Student s = new Student();
+            s.Credit_List.Add(new Credit("Compilators", false));
+            s.AddExams(new Exam("Game Theory", 2, new DateTime()));
+
+            s.Credit_List.Add(new Credit("Probability Theory", true));
+            s.AddExams(new Exam("Probability Theory", 4, new DateTime()));
+
+            Console.WriteLine(s.ToString());
+
+            foreach(Credit crdt in s.Passed_Credit_Iterator())
+            {
+                Console.WriteLine(crdt.ToString());
             }
         }
     }
