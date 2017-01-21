@@ -17,7 +17,7 @@ namespace Lab2_Var1
             this.name = "John";
             this.last_name = "Johnson";
             this.birth_date = new System.DateTime(1990, 2, 2);
-            Console.WriteLine("Created new Person with default constructor.");
+            //Console.WriteLine("Created new Person with default constructor.");
         }
 
         public Person(string input_name, string input_last_name, System.DateTime input_birth_date) {

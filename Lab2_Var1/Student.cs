@@ -147,7 +147,7 @@ namespace Lab2_Var1
                         exam_list.Add(input_exam_list[i]);
                     }
                 }
-                Console.WriteLine("Added {0} Exam(s) to Student's exam_list.", input_exam_list.Length);
+                //Console.WriteLine("Added {0} Exam(s) to Student's exam_list.", input_exam_list.Length);
             }
         }
 
@@ -376,13 +376,18 @@ namespace Lab2_Var1
          * IEnumerator interface. This means, it has methods MoveNext()
          * and Reset() and public property Current.
          * 
-         * StudentEnumerator shuold implement
+         * StudentEnumerator should allow to iterate through a collection
+         * of Strings. Where strings are names of Exams and Credits that
+         * belong to both credit and exam lists.
          */
         private class StudentEnumerator : IEnumerator
         {
-            /* 
+            /* ArrayList - to hold a collection course names.
+             * Course names are strings. And courses are Credits or Exams
+             * that belong to both credit and exam lists.
              */
             private ArrayList credit_intersect_exam;
+            // current - holds current index in the collection
             private int current;
 
             public StudentEnumerator(Student input_s)
@@ -397,18 +402,22 @@ namespace Lab2_Var1
                     if (input_s.exam_list.BinarySearch((Credit)input_s.credit_list[i], comparer) == 0 ||
                         input_s.exam_list.BinarySearch((Credit)input_s.credit_list[i], comparer) > 0)
                     {
-                        credit_intersect_exam.Add(input_s.credit_list[i]);
+                        credit_intersect_exam.Add(((Credit)input_s.credit_list[i]).Credit_Name);
                         //Console.WriteLine("Added Credit to StudentEnumerator.");
                     }
                 }
                 this.current = -1;
             }
 
+            // read-only field to get an object from credit_intersect_exam
+            // with [current] index
             public object Current
             {
                 get { return credit_intersect_exam[current]; }
             }
 
+            // increases [current] by one.
+            // returns false if [current] exceeds credit_intersect_exam length
             public bool MoveNext()
             {
                 ++current;
@@ -427,13 +436,21 @@ namespace Lab2_Var1
                 current = -1;
             }
 
+
+            /* Credit_Exam_Comparer is a helper class which implements
+             * IComparer interface. It implements Compare(obj, obj) method.
+             * Object of this class is used by BinarySearch method from ArrayList class
+             * to compare Exam and Credit objects based on thier names.
+             */
             private class Credit_Exam_Comparer : IComparer
             {
+
                 int IComparer.Compare(object x, object y)
                 {
                     //return String.Compare(((Exam)x).Exam_Name, ((Credit)y).Credit_Name);
                     //return String.Compare(((Exam)x).Exam_Name, (String)y);
                     //Console.WriteLine("Comparing.");
+
                     string e_name = ((Exam)x).Exam_Name;
                     return e_name.CompareTo(((Credit)y).Credit_Name);
                 }

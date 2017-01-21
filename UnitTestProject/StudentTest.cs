@@ -75,15 +75,24 @@ namespace UnitTestProject
             ((Student)student).Credit_List.Add(new Credit("Compilators", true));
             ((Student)student).AddExams(new Exam("Compilators", 4, new DateTime()));
 
-            ((Student)student).Credit_List.Add(new Credit("Compilators", true));
-            ((Student)student).AddExams(new Exam("Compilators", 4, new DateTime()));
+            ((Student)student).Credit_List.Add(new Credit("Game Theory", true));
+            ((Student)student).AddExams(new Exam("Game Theory", 4, new DateTime()));
 
-            ((Student)student).Credit_List.Add(new Credit("Compilators", true));
-            ((Student)student).AddExams(new Exam("Compilators", 4, new DateTime()));
+            ((Student)student).Credit_List.Add(new Credit("Game Theory", true));
+            ((Student)student).AddExams(new Exam("Game Theory", 4, new DateTime()));
 
-            foreach (Object obj in student)
+            ((Student)student).Credit_List.Add(new Credit("Game Development", true));
+            ((Student)student).AddExams(new Exam("Game Development", 4, new DateTime()));
+
+            ((Student)student).Credit_List.Add(new Credit("Game Development", true));
+            ((Student)student).AddExams(new Exam("Game Development", 4, new DateTime()));
+
+            ((Student)student).Credit_List.Add(new Credit("Probabilistic Graphical Models", true));
+            ((Student)student).AddExams(new Exam("Probabilistic Graphical Models", 4, new DateTime()));
+
+            foreach (string obj in student)
             {
-                Console.WriteLine(obj.ToString());
+                Console.WriteLine(obj);
             }
         }
     }
