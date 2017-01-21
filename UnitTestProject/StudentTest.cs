@@ -74,6 +74,13 @@ namespace UnitTestProject
             IEnumerable student = new Student();
             ((Student)student).Credit_List.Add(new Credit("Compilators", true));
             ((Student)student).AddExams(new Exam("Compilators", 4, new DateTime()));
+
+            ((Student)student).Credit_List.Add(new Credit("Compilators", true));
+            ((Student)student).AddExams(new Exam("Compilators", 4, new DateTime()));
+
+            ((Student)student).Credit_List.Add(new Credit("Compilators", true));
+            ((Student)student).AddExams(new Exam("Compilators", 4, new DateTime()));
+
             foreach (Object obj in student)
             {
                 Console.WriteLine(obj.ToString());

@@ -372,6 +372,7 @@ namespace Lab2_Var1
             }
         }
 
+        //TODO: commentaries!!!!
         private class StudentEnumerator : IEnumerator
         {
             //private Student student;
@@ -387,7 +388,8 @@ namespace Lab2_Var1
                 {
                     //Console.WriteLine("In the loop.");
                     //if (input_s.exam_list.BinarySearch(((Credit)input_s.credit_list[i]).Credit_Name, comparer) > 0)
-                    if (input_s.exam_list.BinarySearch((Credit)input_s.credit_list[i], comparer) == 0)
+                    if (input_s.exam_list.BinarySearch((Credit)input_s.credit_list[i], comparer) == 0 ||
+                        input_s.exam_list.BinarySearch((Credit)input_s.credit_list[i], comparer) > 0)
                     {
                         credit_intersect_exam.Add(input_s.credit_list[i]);
                         //Console.WriteLine("Added Credit to StudentEnumerator.");
@@ -425,7 +427,7 @@ namespace Lab2_Var1
                 {
                     //return String.Compare(((Exam)x).Exam_Name, ((Credit)y).Credit_Name);
                     //return String.Compare(((Exam)x).Exam_Name, (String)y);
-                    //Console.WriteLine("Compraing.");
+                    //Console.WriteLine("Comparing.");
                     string e_name = ((Exam)x).Exam_Name;
                     return e_name.CompareTo(((Credit)y).Credit_Name);
                 }
