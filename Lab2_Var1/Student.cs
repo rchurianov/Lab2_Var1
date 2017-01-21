@@ -60,6 +60,8 @@ namespace Lab2_Var1
             }
         }
 
+
+
         public Person Passport_Data
         { 
             get 
@@ -151,6 +153,61 @@ namespace Lab2_Var1
             }
         }
 
+
+        /* A simple iterator to iterate through both
+         * Credits and Exams in lists. Both credits and exams should be
+         * passed. For Credit "passed" means Credit.Passed == true;
+         * for exam "passed" means Exam.Grade > 2.
+         */
+        public IEnumerable Passed_Session_Iterator()
+        {
+            if (credit_list != null)
+            {
+                for (int i = 0; i < credit_list.Count; i++)
+                {
+                    if (((Credit)credit_list[i]).Credit_Passed)
+                        yield return credit_list[i];
+                }
+            }
+            if (exam_list != null)
+            {
+                for (int i = 0; i < exam_list.Count; i++)
+                {
+                    if (((Exam)exam_list[i]).Grade > 2)
+                        yield return exam_list[i];
+                }
+            }
+        }
+
+        /* Iterates through passed Credits which have corresponding
+         * Exam passed with grade > 2
+         */
+        public IEnumerable<Credit> Passed_Credit_Iterator()
+        {
+            IComparer comparer = new Credit_Exam_Comparer();
+            exam_list.Sort();
+            // will return Credit objects only if both credit and exam lists contain smth
+            if (credit_list != null && exam_list != null)
+            {
+                for (int i = 0; i < credit_list.Count; i++)
+                {
+                    int found_exam_index = exam_list.BinarySearch((Credit)credit_list[i], comparer);
+                    if (found_exam_index > 0)
+                    {
+                        Exam found_exam = (Exam)exam_list[found_exam_index];
+                        if (((Credit)credit_list[i]).Credit_Passed &&
+                            found_exam.Grade > 2)
+                        {
+                            yield return (Credit)credit_list[i];
+                        }
+                    }
+                }
+            }
+        }
+
+        /* A simple iterator to iterate through both
+         * credit and exam collections
+         */
         public IEnumerable Session_Iterator()
         {
             if (credit_list != null)
@@ -169,6 +226,12 @@ namespace Lab2_Var1
             }
         }
 
+
+        /* Iterator to iterate through exam_list.
+         * Return Exams from the list one by one, but only those
+         * Exams which have Exam.Grade > min_grade.
+         * min_grade is a required parameter.
+         */
         public IEnumerable<Exam> Exam_Iterator(int min_grade)
         {
             if (exam_list != null)
@@ -454,6 +517,25 @@ namespace Lab2_Var1
                     string e_name = ((Exam)x).Exam_Name;
                     return e_name.CompareTo(((Credit)y).Credit_Name);
                 }
+            }
+        }
+
+        /* Credit_Exam_Comparer is a helper class which implements
+             * IComparer interface. It implements Compare(obj, obj) method.
+             * Object of this class is used by BinarySearch method from ArrayList class
+             * to compare Exam and Credit objects based on thier names.
+             */
+        private class Credit_Exam_Comparer : IComparer
+        {
+
+            int IComparer.Compare(object x, object y)
+            {
+                //return String.Compare(((Exam)x).Exam_Name, ((Credit)y).Credit_Name);
+                //return String.Compare(((Exam)x).Exam_Name, (String)y);
+                //Console.WriteLine("Comparing.");
+
+                string e_name = ((Exam)x).Exam_Name;
+                return e_name.CompareTo(((Credit)y).Credit_Name);
             }
         }
 
