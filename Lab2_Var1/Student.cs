@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lab2_Var1
 {
-    public class Student : Person, IDateAndCopy
+    public class Student : Person, IDateAndCopy, IEnumerable
     {
         private Education degree;
         private int group_number;
@@ -59,6 +59,8 @@ namespace Lab2_Var1
                 return this.degree == education_index;
             }
         }
+
+
 
         public Person Passport_Data
         { 
@@ -147,10 +149,65 @@ namespace Lab2_Var1
                         exam_list.Add(input_exam_list[i]);
                     }
                 }
-                Console.WriteLine("Added {0} Exam(s) to Student's exam_list.", input_exam_list.Length);
+                //Console.WriteLine("Added {0} Exam(s) to Student's exam_list.", input_exam_list.Length);
             }
         }
 
+
+        /* A simple iterator to iterate through both
+         * Credits and Exams in lists. Both credits and exams should be
+         * passed. For Credit "passed" means Credit.Passed == true;
+         * for exam "passed" means Exam.Grade > 2.
+         */
+        public IEnumerable Passed_Session_Iterator()
+        {
+            if (credit_list != null)
+            {
+                for (int i = 0; i < credit_list.Count; i++)
+                {
+                    if (((Credit)credit_list[i]).Credit_Passed)
+                        yield return credit_list[i];
+                }
+            }
+            if (exam_list != null)
+            {
+                for (int i = 0; i < exam_list.Count; i++)
+                {
+                    if (((Exam)exam_list[i]).Grade > 2)
+                        yield return exam_list[i];
+                }
+            }
+        }
+
+        /* Iterates through passed Credits which have corresponding
+         * Exam passed with grade > 2
+         */
+        public IEnumerable<Credit> Passed_Credit_Iterator()
+        {
+            IComparer comparer = new Credit_Exam_Comparer();
+            exam_list.Sort();
+            // will return Credit objects only if both credit and exam lists contain smth
+            if (credit_list != null && exam_list != null)
+            {
+                for (int i = 0; i < credit_list.Count; i++)
+                {
+                    int found_exam_index = exam_list.BinarySearch((Credit)credit_list[i], comparer);
+                    if (found_exam_index > 0)
+                    {
+                        Exam found_exam = (Exam)exam_list[found_exam_index];
+                        if (((Credit)credit_list[i]).Credit_Passed &&
+                            found_exam.Grade > 2)
+                        {
+                            yield return (Credit)credit_list[i];
+                        }
+                    }
+                }
+            }
+        }
+
+        /* A simple iterator to iterate through both
+         * credit and exam collections
+         */
         public IEnumerable Session_Iterator()
         {
             if (credit_list != null)
@@ -169,6 +226,12 @@ namespace Lab2_Var1
             }
         }
 
+
+        /* Iterator to iterate through exam_list.
+         * Return Exams from the list one by one, but only those
+         * Exams which have Exam.Grade > min_grade.
+         * min_grade is a required parameter.
+         */
         public IEnumerable<Exam> Exam_Iterator(int min_grade)
         {
             if (exam_list != null)
@@ -372,5 +435,121 @@ namespace Lab2_Var1
             }
         }
 
+        /* StudentEnumerator - helper class, which implements
+         * IEnumerator interface. This means, it has methods MoveNext()
+         * and Reset() and public property Current.
+         * 
+         * StudentEnumerator should allow to iterate through a collection
+         * of Strings. Where strings are names of Exams and Credits that
+         * belong to both credit and exam lists.
+         */
+        private class StudentEnumerator : IEnumerator
+        {
+            /* ArrayList - to hold a collection course names.
+             * Course names are strings. And courses are Credits or Exams
+             * that belong to both credit and exam lists.
+             */
+            private ArrayList credit_intersect_exam;
+            // current - holds current index in the collection
+            private int current;
+
+            public StudentEnumerator(Student input_s)
+            {
+                IComparer comparer = new Credit_Exam_Comparer();
+                input_s.exam_list.Sort();
+                credit_intersect_exam = new ArrayList();
+                for (int i = 0; i < input_s.credit_list.Count; i++ )
+                {
+                    //Console.WriteLine("In the loop.");
+                    //if (input_s.exam_list.BinarySearch(((Credit)input_s.credit_list[i]).Credit_Name, comparer) > 0)
+                    if (input_s.exam_list.BinarySearch((Credit)input_s.credit_list[i], comparer) == 0 ||
+                        input_s.exam_list.BinarySearch((Credit)input_s.credit_list[i], comparer) > 0)
+                    {
+                        credit_intersect_exam.Add(((Credit)input_s.credit_list[i]).Credit_Name);
+                        //Console.WriteLine("Added Credit to StudentEnumerator.");
+                    }
+                }
+                this.current = -1;
+            }
+
+            // read-only field to get an object from credit_intersect_exam
+            // with [current] index
+            public object Current
+            {
+                get { return credit_intersect_exam[current]; }
+            }
+
+            // increases [current] by one.
+            // returns false if [current] exceeds credit_intersect_exam length
+            public bool MoveNext()
+            {
+                ++current;
+                if (current < credit_intersect_exam.Count)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public void Reset()
+            {
+                current = -1;
+            }
+
+
+            /* Credit_Exam_Comparer is a helper class which implements
+             * IComparer interface. It implements Compare(obj, obj) method.
+             * Object of this class is used by BinarySearch method from ArrayList class
+             * to compare Exam and Credit objects based on thier names.
+             */
+            private class Credit_Exam_Comparer : IComparer
+            {
+
+                int IComparer.Compare(object x, object y)
+                {
+                    //return String.Compare(((Exam)x).Exam_Name, ((Credit)y).Credit_Name);
+                    //return String.Compare(((Exam)x).Exam_Name, (String)y);
+                    //Console.WriteLine("Comparing.");
+
+                    string e_name = ((Exam)x).Exam_Name;
+                    return e_name.CompareTo(((Credit)y).Credit_Name);
+                }
+            }
+        }
+
+        /* Credit_Exam_Comparer is a helper class which implements
+             * IComparer interface. It implements Compare(obj, obj) method.
+             * Object of this class is used by BinarySearch method from ArrayList class
+             * to compare Exam and Credit objects based on thier names.
+             */
+        private class Credit_Exam_Comparer : IComparer
+        {
+
+            int IComparer.Compare(object x, object y)
+            {
+                //return String.Compare(((Exam)x).Exam_Name, ((Credit)y).Credit_Name);
+                //return String.Compare(((Exam)x).Exam_Name, (String)y);
+                //Console.WriteLine("Comparing.");
+
+                string e_name = ((Exam)x).Exam_Name;
+                return e_name.CompareTo(((Credit)y).Credit_Name);
+            }
+        }
+
+        /* Student class implements IEnumerable interface,
+         * so it should implement GetEnumerator() method.
+         * GetEnumerator() should return an object, that
+         * implements IEnumerator interface.
+         */
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            /* This method returns a new StudentEnumerator object.
+             * StudentEnumerator class implements IEnumerator interface.
+             */
+            return new StudentEnumerator(this);
+        }
     }
 }

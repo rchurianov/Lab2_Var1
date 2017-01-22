@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Lab2_Var1
 {
-    public class Exam : IDateAndCopy
+    public class Exam : IDateAndCopy, IComparable
     {
         public Exam(string input_Exam_Name, int input_Grade, DateTime input_Exam_Date)
         {
             this.Exam_Name = input_Exam_Name;
             this.Grade = input_Grade;
             this.Exam_Date = input_Exam_Date;
-            Console.WriteLine("Created new Exam with given parameters.");
+            //Console.WriteLine("Created new Exam with given parameters.");
         }
 
         public Exam()
@@ -125,6 +125,30 @@ namespace Lab2_Var1
                 return new DateTime();
             }
             set { }
+        }
+
+
+        /* Exam class implements IComparable interface,
+         * which means it has to implement CompareTo method.
+         * CompareTo compares two Exam objects based on Exam_Name property.
+         * Since Exam_Name is a string, CompareTo will return the result of
+         * String.CompareTo method.
+         */
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return -1;
+
+            Exam another_exam = obj as Exam;
+            if (another_exam != null)
+            {
+                return this.Exam_Name.CompareTo(another_exam.Exam_Name); // +
+                       //this.Grade.CompareTo(another_exam.Grade) +
+                       //this.Exam_Date.CompareTo(another_exam.Exam_Date);
+            }
+            else
+            {
+                throw new ArgumentException("Object is not exam.");
+            }
         }
     }
 }
