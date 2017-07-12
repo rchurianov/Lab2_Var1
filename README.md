@@ -12,6 +12,7 @@ From the user's perspective the apllication perfroms as follows:
 * Prints `Exam`s and `Credit`s of the `Student` by going through an iterator
 * Prints `Exam`s with `Grade` higher than 3.
 
+------------------------------------------------------------------------------------------------------------------------------------
 Requirements for the `Student`, `Person`, `Exam` and other classes follow.
 
 In `Person` class and in other classes, required  by variant 1 fulfill following tasks:
